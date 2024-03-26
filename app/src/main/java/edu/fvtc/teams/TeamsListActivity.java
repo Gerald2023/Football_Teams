@@ -8,7 +8,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class TeamsListActivity extends AppCompatActivity {
+
+    public static final String TAG = "TeamsListActivity";
+    public static final String  FILENAME="teams.txt";
+    ArrayList<Team> teams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
