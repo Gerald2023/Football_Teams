@@ -1,11 +1,13 @@
 package edu.fvtc.teams;
 
 import android.content.Context;
+import android.media.Image;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+// the sole purpose of the adapter is to bind stuff to the screen
 public class  TeamsAdapter extends RecyclerView.Adapter {
     private ArrayList<Team> teamData;
     private View.OnClickListener onItemClickListener;
@@ -20,34 +23,41 @@ public class  TeamsAdapter extends RecyclerView.Adapter {
 
     private Context parentContext;
 
-    public class ActorViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvFirstName;
-        public TextView tvLastName;
+    public class TeamViewHolder extends RecyclerView.ViewHolder{
+        public TextView tvName;
+        public TextView tvCity;
 
-        public ActorViewHolder(@NonNull View itemView) {
+        public ImageButton imageButtonPhoto;
+
+        private View.OnClickListener onClickListener;
+
+        public TeamViewHolder(@NonNull View itemView) {
             super(itemView);
-            //tvFirstName = itemView.findViewById(R.id.tvFirstName);
-            //tvLastName = itemView.findViewById(R.id.tvLastName);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvCity = itemView.findViewById(R.id.tvCity);
             // Code involving with click an item in the list.
             itemView.setTag(this);
             itemView.setOnClickListener(onItemClickListener);
+            imageButtonPhoto = itemView.findViewById(R.id.imgPhoto);
         }
 
-        public TextView getTvFirstName()
+        public TextView getTvName()
         {
-            return tvFirstName;
+            return tvName;
         }
-        public TextView getTvLastName()
+        public TextView getTvCity()
         {
-            return tvLastName;
+            return tvCity;
         }
+
+        public ImageButton getImageButtonPhoto(){return imageButtonPhoto;}
 
     }
 
     public TeamsAdapter(ArrayList<Team> data, Context context)
     {
         teamData = data;
-        Log.d(TAG, "ActorAdapter: " + data.size());
+        Log.d(TAG, "TeamAdapter: " + data.size());
         parentContext = context;
     }
 
@@ -61,18 +71,22 @@ public class  TeamsAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.complex_item_view, parent, false);
-        //return new ActorViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        return new TeamViewHolder(v);
 
-        return  null;
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: " + teamData.get(position));
-        ActorViewHolder actorViewHolder = (ActorViewHolder) holder;
-        //actorViewHolder.getTvFirstName().setText(teamData.get(position).getFirstName());
-        //actorViewHolder.getTvLastName().setText(teamData.get(position).getLastName());
+        TeamViewHolder teamViewHolder = (TeamViewHolder) holder;
+        teamViewHolder.getTvName().setText(teamData.get(position).getName());
+        teamViewHolder.getTvCity().setText(teamData.get(position).getCity());
+
+        teamViewHolder.getImageButtonPhoto().setImageResource(teamData.get(position).getImgId());
+
+
 
     }
 
