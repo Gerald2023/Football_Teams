@@ -85,7 +85,7 @@ public class Team {
                 boolean isFavorite,
                 int imgId)
     {
-        this.id = id;
+        this.id = id; // don't forget this
         this.name = name;
         this.city = city;
         this.cellPhone = cellPhone;

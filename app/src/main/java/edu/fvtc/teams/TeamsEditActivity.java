@@ -28,7 +28,7 @@ public class TeamsEditActivity extends AppCompatActivity {
 
         if(teamId != -1)
         {
-            // Get the team
+            //get the team
 
         }
         else {
