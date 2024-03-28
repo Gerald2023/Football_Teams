@@ -1,24 +1,56 @@
 package edu.fvtc.teams;
 
-import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 public class TeamsEditActivity extends AppCompatActivity {
+    public static final String TAG = TeamsEditActivity.class.toString();
+    Team team;
+    boolean loading = true;
+    int teamId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_teams_edit);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        Log.d(TAG, "onCreate: Start");
+
+        Bundle extras = getIntent().getExtras();
+        teamId = extras.getInt("teamid");
+
+        this.setTitle("Team: " + teamId);
+
+        if(teamId != -1)
+        {
+            // Get the team
+
+        }
+        else {
+            team = new Team();
+        }
+
+        initRatingButton();
+
+        Log.d(TAG, "onCreate: End");
+    }
+
+    private void initRatingButton()
+    {
+        Button btnRating = findViewById(R.id.btnRating);
+
+        btnRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                RaterDialog raterDialog = new RaterDialog(team.getRating());
+                raterDialog.show(fragmentManager, "Rate Team");
+            }
         });
     }
 }

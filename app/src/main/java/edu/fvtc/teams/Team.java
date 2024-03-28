@@ -1,13 +1,11 @@
 package edu.fvtc.teams;
 
 public class Team {
-
     private int id;
-    private  String name;
+    private String name;
     private String city;
     private String cellPhone;
-
-    private float rating;
+    private float  rating;
     private int imgId;
     private boolean isFavorite;
 
@@ -68,39 +66,38 @@ public class Team {
         isFavorite = favorite;
     }
 
-    //constructor to be able to feed all the information
-
-    public Team(){
-
+    public Team()
+    {
+        this.id = -1;
         this.name = "";
-        this.city="";
-        this.cellPhone="";
-        this.rating = 0;
+        this.city = "";
+        this.cellPhone = "";
+        this.rating = 0.0f;
         this.imgId = 0;
         this.isFavorite = false;
-
     }
 
     public Team(int id,
                 String name,
                 String city,
                 String cellPhone,
-                float  rating,
+                float rating,
                 boolean isFavorite,
-                int imgId){
-
+                int imgId)
+    {
+        this.id = id;
         this.name = name;
-        this.city= city;
-        this.cellPhone= cellPhone;
+        this.city = city;
+        this.cellPhone = cellPhone;
         this.rating = rating;
         this.imgId = imgId;
         this.isFavorite = isFavorite;
-
     }
 
     @Override
-    public String toString(){
-        return String.valueOf(id)+ '|' +
+    public String toString()
+    {
+        return String.valueOf(id) + '|' +
                 name + '|' +
                 city + '|' +
                 cellPhone + '|' +
