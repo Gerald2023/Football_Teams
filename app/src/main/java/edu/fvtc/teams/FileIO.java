@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class FileIO {
     public static final String TAG = "FileIOMethod";
 
-    public void writeFile(String filename,
+    public static void writeFile(String filename,
                           AppCompatActivity activity,
                           String[] items)
     {
@@ -51,7 +51,7 @@ public class FileIO {
         }
     }
 
-    public ArrayList<String> readFile(String filename, AppCompatActivity activity)
+    public static ArrayList<String> readFile(String filename, AppCompatActivity activity)
     {
         ArrayList<String> items = new ArrayList<String>();
 
