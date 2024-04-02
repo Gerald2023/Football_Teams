@@ -75,7 +75,7 @@ public class TeamsListActivity extends AppCompatActivity {
         teams = readTeams(this);
     }
 
-    public ArrayList<Team> readTeams(AppCompatActivity activity) {
+    public static ArrayList<Team> readTeams(AppCompatActivity activity) {
         //reading out
         ArrayList<String> strData = FileIO.readFile(FILENAME, activity);
         ArrayList<Team> teams =new ArrayList<Team>();
@@ -97,7 +97,7 @@ public class TeamsListActivity extends AppCompatActivity {
         return  teams;
     }
 
-    private static String[] createDataArray(ArrayList<Team> teams){
+    public static String[] createDataArray(ArrayList<Team> teams){
 
         String[] teamData = new String[teams.size()];
         for(int count = 0; count < teams.size(); count++){
