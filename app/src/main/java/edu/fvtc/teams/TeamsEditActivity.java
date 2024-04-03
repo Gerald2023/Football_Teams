@@ -45,9 +45,20 @@ public class TeamsEditActivity extends AppCompatActivity implements  RaterDialog
             team = new Team();
         }
 
+        Navbar.initListButton(this);
+        Navbar.initSettingsButton(this);
+        Navbar.initMapButton(this);
+
         initRatingButton();
         initToggleButton();
         initSaveButton();
+        initTextChanged(R.id.etName);
+        initTextChanged(R.id.etCity);
+        initTextChanged(R.id.editCell);
+
+
+        //Get the  teams
+        teams = TeamsListActivity.readTeams(this);
 
         setForEditting(false);
         Log.d(TAG, "onCreate: End");
@@ -59,6 +70,9 @@ public class TeamsEditActivity extends AppCompatActivity implements  RaterDialog
             @Override
             public void onClick(View v) {
                 if(teamId == -1){
+
+                    Log.d(TAG, "onClick: " + team.toString());
+                    team.setId(teams.get(teams.size()-1).getId() + 1);
                     teams.add(team);
 
                 }
@@ -88,7 +102,7 @@ public class TeamsEditActivity extends AppCompatActivity implements  RaterDialog
 
             @Override
             public void afterTextChanged(Editable s) {
-                team.setName(s.toString());
+                team.setControlText(controlId, s.toString());
 
             }
         });

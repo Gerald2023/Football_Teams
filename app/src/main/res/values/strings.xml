@@ -14,4 +14,7 @@
     <string name="city">City</string>
     <string name="enter_city">Enter City</string>
     <string name="cell_phone">Cell Phone</string>
+    <string name="new_text">New Text</string>
+    <string name="delete">Delete</string>
+    <string name="_100">100%</string>
 </resources>

@@ -93,6 +93,19 @@ public class Team {
         this.imgId = imgId;
         this.isFavorite = isFavorite;
     }
+     public void setControlText(int controlId, String value){
+        if(controlId == R.id.etName){
+            this.setName(value);
+        }
+        else if(controlId == R.id.etCity){
+
+            this.setCity(value);
+        }
+        else{
+            this.setCellPhone(value);
+        }
+
+     }
 
     @Override
     public String toString()
