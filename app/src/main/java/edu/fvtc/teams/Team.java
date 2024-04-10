@@ -58,7 +58,7 @@ public class Team {
         this.imgId = imgId;
     }
 
-    public boolean isFavorite() {
+    public boolean getIsFavorite() {
         return isFavorite;
     }
 

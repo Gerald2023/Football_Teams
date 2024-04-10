@@ -65,11 +65,15 @@ public class TeamsListActivity extends AppCompatActivity {
         teams = new ArrayList<Team>();
 
         teams = readTeams(this);
-        if(teams.size() == 0)
+        if(teams.size() == 0){
             createTeams();
+
+        }
 
         initDeleteSwitch();
         initAddTeamButton();
+
+
 
         RebindTeams();
     }
