@@ -62,7 +62,7 @@ public class Team {
         return isFavorite;
     }
 
-    public void setFavorite(boolean favorite) {
+    public void setIsFavorite(boolean favorite) {
         isFavorite = favorite;
     }
 
@@ -85,7 +85,7 @@ public class Team {
                 boolean isFavorite,
                 int imgId)
     {
-        this.id = id; // don't forget this
+        this.id = id;
         this.name = name;
         this.city = city;
         this.cellPhone = cellPhone;
@@ -93,19 +93,21 @@ public class Team {
         this.imgId = imgId;
         this.isFavorite = isFavorite;
     }
-     public void setControlText(int controlId, String value){
-        if(controlId == R.id.etName){
-            this.setName(value);
-        }
-        else if(controlId == R.id.etCity){
 
+    public void setControlText(int controlId, String value)
+    {
+        if(controlId == R.id.etName)
+        {
+            this.setName(value);
+        } else if (controlId == R.id.etCity) {
             this.setCity(value);
         }
-        else{
+        else
+        {
             this.setCellPhone(value);
         }
 
-     }
+    }
 
     @Override
     public String toString()
