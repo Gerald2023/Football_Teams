@@ -69,7 +69,7 @@ public class TeamsDataSource {
             //Cursor cursor = database.query("tblTeam",null, null, null, null, null, null);
 
             cursor.moveToFirst();
-            while(!cursor.isAfterLast())
+            while(!cursor.isAfterLast()) // am I at the end of my data set
             {
                 team = new Team();
                 team.setId(cursor.getInt(0));
