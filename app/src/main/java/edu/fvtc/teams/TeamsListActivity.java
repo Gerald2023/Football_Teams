@@ -33,6 +33,8 @@ public class TeamsListActivity extends AppCompatActivity {
             Log.d(TAG, "onClick: " + team.getId());
             startActivity(intent);
         }
+
+
     };
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -42,14 +44,13 @@ public class TeamsListActivity extends AppCompatActivity {
             Log.d(TAG, "onCheckedChanged: " + isChecked);
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) buttonView.getTag();
             int position = viewHolder.getAdapterPosition();
+            teams.get(position).setIsFavorite(isChecked);
+            TeamsDataSource ds = new TeamsDataSource(TeamsListActivity.this);
+            ds.update(teams.get(position));
 
-            teams.get(position).setFavorite(isChecked);
-
-            //teams.remove(teams.get(position));
-
-            FileIO.writeFile(TeamsListActivity.FILENAME,
-                    TeamsListActivity.this,
-                    createDataArray(teams));
+            //FileIO.writeFile(TeamsListActivity.FILENAME,
+            //        TeamsListActivity.this,
+            //        createDataArray(teams));
         }
     };
 
@@ -64,22 +65,27 @@ public class TeamsListActivity extends AppCompatActivity {
         this.setTitle("List");
         teams = new ArrayList<Team>();
 
-        teams = readTeams(this);
-        if(teams.size() == 0){
-            createTeams();
+        initDatabase();
 
+        //teams = readTeams(this);
+        if(teams.size() == 0) {
+            createTeams();
         }
 
         initDeleteSwitch();
         initAddTeamButton();
-
-
-
         RebindTeams();
     }
 
-    private void initAddTeamButton() {
+    private void initDatabase() {
+        TeamsDataSource ds = new TeamsDataSource(this);
+        ds.open(false);
+        teams = ds.get();
+        Log.d(TAG, "initDatabase: Teams: " + teams.size());
+    }
 
+
+    private void initAddTeamButton() {
         Button btnAddTeam = findViewById(R.id.btnAddTeam);
         btnAddTeam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +99,6 @@ public class TeamsListActivity extends AppCompatActivity {
     }
 
     private void initDeleteSwitch() {
-
         SwitchCompat switchDelete = findViewById(R.id.switchDelete);
         switchDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -118,44 +123,53 @@ public class TeamsListActivity extends AppCompatActivity {
 
     }
 
+
     private void createTeams() {
+        Log.d(TAG, "createTeams: Start");
         teams = new ArrayList<Team>();
 
-        teams.add(new Team(1, "Packers", "Green Bay","9205551234", 1, true, R.drawable.packers ));
-        teams.add(new Team(2, "Lions", "Detroit","9204441234", 2, false, R.drawable.lions ));
-        teams.add(new Team(3, "Vikings", "Minneapolis","9203331234", 4, false, R.drawable.vikings ));
-        teams.add(new Team(4, "Bears", "Chicago","9202221234", 4, false, R.drawable.bears ));
+        //teams.add(new Team(1, "Packers", "Green Bay","9205551234", 1, true, R.drawable.packers ));
+        //teams.add(new Team(2, "Lions", "Detroit","9204441234", 2, false, R.drawable.lions ));
+        //teams.add(new Team(3, "Vikings", "Minneapolis","9203331234", 4, false, R.drawable.vikings ));
+        //teams.add(new Team(4, "Bears", "Chicago","9202221234", 4, false, R.drawable.bears ));
 
-        FileIO.writeFile(FILENAME,this, createDataArray(teams));
-        teams = readTeams(this);
+        //FileIO.writeFile(FILENAME, this, createDataArray(teams));
+        //teams = readTeams(this);
+
+        TeamsDataSource ds = new TeamsDataSource(TeamsListActivity.this);
+        ds.open(true);
+        teams = ds.get();
+
+        Log.d(TAG, "createTeams: End: " + teams.size());
     }
 
     public static ArrayList<Team> readTeams(AppCompatActivity activity) {
-        //reading out
         ArrayList<String> strData = FileIO.readFile(FILENAME, activity);
-        ArrayList<Team> teams =new ArrayList<Team>();
+        ArrayList<Team> teams = new ArrayList<Team>();
 
-        for(String s : strData){
+        for(String s : strData)
+        {
             Log.d(TAG, "readTeams: " + s);
             String[] data = s.split("\\|");
             teams.add(new Team(
-               Integer.parseInt(data[0]),
-               data[1],
-               data[2],
-               data[3],
-               Float.parseFloat(data[4]),
-               Boolean.parseBoolean(data[5]),
-               Integer.parseInt(data[6])
+                    Integer.parseInt(data[0]),
+                    data[1],
+                    data[2],
+                    data[3],
+                    Float.parseFloat(data[4]),
+                    Boolean.parseBoolean(data[5]),
+                    Integer.parseInt(data[6])
             ));
         }
         Log.d(TAG, "readTeams: " + teams.size());
-        return  teams;
+        return teams;
     }
 
-    public static String[] createDataArray(ArrayList<Team> teams){
-
+    public static String[] createDataArray(ArrayList<Team> teams)
+    {
         String[] teamData = new String[teams.size()];
-        for(int count = 0; count < teams.size(); count++){
+        for (int count = 0; count < teams.size(); count++)
+        {
             teamData[count] = teams.get(count).toString();
         }
         return teamData;

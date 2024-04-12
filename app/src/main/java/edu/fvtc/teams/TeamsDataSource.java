@@ -33,7 +33,6 @@ public class TeamsDataSource {
         Log.d(TAG, "open: " + database.isOpen());
         if(refresh) refreshData();
     }
-
     public void close()
     {
         dbHelper.close();
@@ -69,7 +68,7 @@ public class TeamsDataSource {
             //Cursor cursor = database.query("tblTeam",null, null, null, null, null, null);
 
             cursor.moveToFirst();
-            while(!cursor.isAfterLast()) // am I at the end of my data set
+            while(!cursor.isAfterLast())
             {
                 team = new Team();
                 team.setId(cursor.getInt(0));
@@ -222,7 +221,6 @@ public class TeamsDataSource {
             values.put("phone", team.getCellPhone());
             //values.put("latitude", team.getLatitude());
             //values.put("longitude", team.getLongitude());
-
             String where = "id = " + team.getId();
 
             rowsaffected = (int)database.update("tblTeam", values, where, null);
