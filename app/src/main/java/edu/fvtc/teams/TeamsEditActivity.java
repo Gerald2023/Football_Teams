@@ -65,31 +65,28 @@ public class TeamsEditActivity extends AppCompatActivity implements  RaterDialog
 
     private void initSaveButton() {
         Button btnSave = findViewById(R.id.btnSave);
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TeamsDataSource ds = new TeamsDataSource( TeamsEditActivity.this);
+                TeamsDataSource ds = new TeamsDataSource(TeamsEditActivity.this);
                 ds.open();
-
-
-                if(teamId == -1){
-
+                if(teamId == -1)
+                {
                     Log.d(TAG, "onClick: " + team.toString());
-                    team.setId(teams.get(teams.size()-1).getId() + 1);
-                    teams.add(team);
-
+                    team.setId(ds.getNewId());
+                    //teams.add(team);
+                    ds.insert(team);
                 }
-                else{
-                    teams.set(teamId -1, team);
+                else {
+                    //teams.set(teamId, team);
                     ds.update(team);
-
                 }
-/*                FileIO.writeFile(TeamsListActivity.FILENAME,
-                        TeamsEditActivity.this,
-                        TeamsListActivity.createDataArray(teams));*/
+                //FileIO.writeFile(TeamsListActivity.FILENAME,
+                //          TeamsEditActivity.this,
+                //                 TeamsListActivity.createDataArray(teams));
             }
         });
-
     }
 
     private void initTextChanged(int controlId){
@@ -156,7 +153,7 @@ public class TeamsEditActivity extends AppCompatActivity implements  RaterDialog
         //Get the team
         //team = teams.get(teamId);
         TeamsDataSource ds = new TeamsDataSource(TeamsEditActivity.this);
-        teams = ds.get();
+       // teams = ds.get();
         team = ds.get(teamId);
 
         rebindTeam();
