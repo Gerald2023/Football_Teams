@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/activity_teams_edit"
+
     tools:context=".TeamsEditActivity">
 
     <LinearLayout
@@ -158,6 +160,14 @@
                 </Button>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <ImageButton
+                android:id="@+id/imageTeam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/photoicon"
+                tools:layout_editor_absoluteX="286dp"
+                tools:layout_editor_absoluteY="64dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
