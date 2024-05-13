@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -69,6 +70,7 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         initRatingButton();
         initToggleButton();
         initSaveButton();
+        initCallFunction();
 
         initTextChanged(R.id.etName);
         initTextChanged(R.id.etCity);
@@ -99,6 +101,58 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
                 team.setPhoto(scaledPhoto);
             }
         }
+    }
+    private void initCallFunction() {
+        EditText editCell = findViewById(R.id.editCell);
+        editCell.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                checkPhonePermission(team.getCellPhone());
+                return false;
+            }
+        });
+    }
+    private void checkPhonePermission(String cellphone) {
+        // Check the API version
+        if(Build.VERSION.SDK_INT >= 23)
+        {
+            // Check for the manifest permission
+            if(ContextCompat.checkSelfPermission(TeamsEditActivity.this, Manifest.permission.CALL_PHONE) != PERMISSION_GRANTED){
+                if(ActivityCompat.shouldShowRequestPermissionRationale(TeamsEditActivity.this, Manifest.permission.CALL_PHONE)){
+                    Snackbar.make(findViewById(R.id.activity_teams_edit), "Teams requires this permission to place a call form the app.",
+                            Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.d(TAG, "onClick: snackBar");
+                            ActivityCompat.requestPermissions(TeamsEditActivity.this,
+                                    new String[] {Manifest.permission.CALL_PHONE},PERMISSION_REQUEST_PHONE);
+                        }
+                    }).show();
+                }
+                else {
+                    Log.d(TAG, "checkPhonePermission: 1");
+                    ActivityCompat.requestPermissions(TeamsEditActivity.this,
+                            new String[] {Manifest.permission.CALL_PHONE},PERMISSION_REQUEST_PHONE);
+                    callTeam(cellphone);
+                }
+            }
+            else{
+                Log.d(TAG, "checkPhonePermission: 2");
+                callTeam(cellphone);
+            }
+        }
+        else {
+            // Only rely on the previous permissions
+            callTeam(cellphone);
+        }
+    }
+
+    private void callTeam(String cellphone) {
+
+        Log.d(TAG, "callTeam: " + cellphone);
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + cellphone));
+        startActivity(intent);
     }
 
     private void initImageButton() {
