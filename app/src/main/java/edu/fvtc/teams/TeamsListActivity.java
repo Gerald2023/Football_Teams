@@ -18,6 +18,8 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class TeamsListActivity extends AppCompatActivity {
     public static final String TAG = "TeamsListActivity";
@@ -25,6 +27,10 @@ public class TeamsListActivity extends AppCompatActivity {
     ArrayList<Team> teams;
     RecyclerView teamList;
     TeamsAdapter teamsAdapter;
+
+    Comparator<Team> nameComparator = (c1, c2) -> c1.getName().compareTo(c2.getName());
+    Comparator<Team> cityComparator = (c1, c2) -> c1.getCity().compareTo(c2.getCity());
+    Comparator<Team> isFavoriteComparator = (c1, c2) -> (String.valueOf(c1.getIsFavorite()).compareTo(String.valueOf(c2.getIsFavorite())));
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -214,6 +220,27 @@ public class TeamsListActivity extends AppCompatActivity {
         }
         Log.d(TAG, "readTeams: " + teams.size());
         return teams;
+    }
+
+    private void sortTeams(ArrayList<Team> teams)
+    {
+        String sortBy = getSharedPreferences("teamspreferences",
+                Context.MODE_PRIVATE)
+                .getString("sortfield", "name");
+        String sortOrder = getSharedPreferences("teamspreferences",
+                Context.MODE_PRIVATE)
+                .getString("sortorder", "ASC");
+        Log.d(TAG, "sortTeams: " + sortBy + ":" + sortOrder);
+        if(sortOrder =="ASC") {
+            if (sortBy == "name") teams.sort(nameComparator);
+            if (sortBy == "city") teams.sort(cityComparator);
+            if (sortBy == "isfavorite") teams.sort(isFavoriteComparator);
+        }
+        else {
+            if (sortBy == "name") teams.sort(Collections.reverseOrder(nameComparator));
+            if (sortBy == "city") teams.sort(Collections.reverseOrder(cityComparator));
+            if (sortBy == "isfavorite") teams.sort(Collections.reverseOrder(isFavoriteComparator));
+        }
     }
 
     public static String[] createDataArray(ArrayList<Team> teams)
