@@ -2,6 +2,7 @@ package edu.fvtc.teams;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,11 +29,20 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.SaveRatingListener {
+public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.SaveRatingListener, OnMapReadyCallback {
     public static final String TAG = TeamsEditActivity.class.toString();
     public static final int PERMISSION_REQUEST_PHONE = 102;
     public static final int PERMISSION_REQUEST_CAMERA = 103;
@@ -40,6 +52,8 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
     int teamId = -1;
 
     ArrayList<Team> teams;
+    private GoogleMap gMap;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
 
     @Override
@@ -154,6 +168,8 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         intent.setData(Uri.parse("tel:" + cellphone));
         startActivity(intent);
     }
+
+
 
     private void initImageButton() {
         ImageButton imageTeam = findViewById(R.id.imageTeam);
@@ -354,6 +370,10 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
             team.setPhoto(BitmapFactory.decodeResource(this.getResources(), R.drawable.photoicon));
         }
         imageButtonPhoto.setImageBitmap(team.getPhoto());
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     private void initRatingButton()
@@ -377,5 +397,44 @@ public class TeamsEditActivity extends AppCompatActivity implements RaterDialog.
         txtRating.setText(String.valueOf(rating));
         team.setRating(rating);
 
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        try {
+            Log.d(TAG, "onMapReady: Start");
+            gMap = googleMap;
+            gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            Point point = new Point();
+
+            WindowManager windowManager = getWindowManager();
+            windowManager.getDefaultDisplay().getSize(point);
+
+            if(team != null)
+            {
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                String info = team.getName() + ", " + team.getCity() + ": " + team.getRating();
+
+                LatLng marker = new LatLng(team.getLatitude(), team.getLongitude());
+                builder.include(marker);
+
+                gMap.addMarker(new MarkerOptions()
+                        .position(marker)
+                        .title(team.getName())
+                        .snippet(team.getCity()));
+
+                // move to that spot
+                gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker, 13f));
+
+
+            }
+            else {
+                Log.d(TAG, "onMapReady: No team");
+            }
+        }
+        catch(Exception e)
+        {
+            Log.d(TAG, "onMapReady: " + e.getMessage());
+        }
     }
 }

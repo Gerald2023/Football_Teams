@@ -62,6 +62,7 @@ public class TeamsMapActivity extends AppCompatActivity {
 
         initGetLocationButton();
 
+        // Deals with getting out current location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         createLocationRequest();
         createLocationCallback();
@@ -88,6 +89,8 @@ public class TeamsMapActivity extends AppCompatActivity {
         this.setTitle(getString(R.string.team_map_activity));
         Log.d(TAG, "onCreate: End");
     }
+
+
 
     private void initGetLocationButton() {
         Button btnGetLocation = findViewById(R.id.buttonGetLocation);
