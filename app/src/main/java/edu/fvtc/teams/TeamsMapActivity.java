@@ -67,8 +67,8 @@ public class TeamsMapActivity extends AppCompatActivity {
         createLocationCallback();
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        //accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        //magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         Log.d(TAG, "onCreate: 1");
 
@@ -140,8 +140,8 @@ public class TeamsMapActivity extends AppCompatActivity {
                             "Accuracy: " + location.getAccuracy());
                     TextView textLatitude = findViewById(R.id.textLatitude);
                     TextView textLongitude = findViewById(R.id.textLongitude);
-                    //textLatitude.setText(String.valueOf(location.getLatitude()));
-                    //textLongitude.setText(String.valueOf(location.getLongitude()));
+                    textLatitude.setText(String.valueOf(location.getLatitude()));
+                    textLongitude.setText(String.valueOf(location.getLongitude()));
 
                 }
             }
